@@ -32,3 +32,5 @@ change).
 
 - [ ] Look more into Pandas, try to use it for Spacemed projects
 - [ ] Check the book that was mentioned, maybe sign up for a Python course, with mini projects
+- [ ] Try to find more time for Python, as I'm really enjoying the course, but the commitments from other parts of the course are slightly overwhelming right now. (Will try to blend them into each other essentially.)
+
