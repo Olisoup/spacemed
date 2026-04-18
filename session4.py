@@ -1,6 +1,6 @@
 # ---
 # title: "Session 4: Reproducible Documents"
-# author: Joseph Carol
+# author: Olivier Soubelet
 # format:
 #   html:
 #     code-fold: true
@@ -22,17 +22,13 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.16.1
 #   kernelspec:
-#     display_name: Python [conda env:conda_envs-computelab-2025-2]
+#     display_name: Python [conda env:.conda-spacemed26]
 #     language: python
-#     name: conda-env-conda_envs-computelab-2025-2-py
+#     name: conda-env-.conda-spacemed26-py
 # ---
 
 # %% [markdown]
-# # Session 4
-# ## Reproducible Documents and Algorithm Design
-
-# %% [markdown]
-# LET'S GET GOING WITH SOME LATEX IN MD :)))))
+# # Reproducible Documents & Algorithm Design
 
 # %% [markdown]
 # ## Rocket Equation
@@ -56,44 +52,40 @@ time = []
 absorption = []
 
 # %%
-# Import the file
 
-dataFile = open("data/pulse_data.csv")
+dataFile = open("data/pulse_data.csv") # Importing the file
 
 # Use a for loop to fill the lists
 
-dataFile.readline() # We don't want to read in the first row because it's just the column headers, so we read through the first line to "trash" it
+dataFile.readline() # We don't want to read in the first since it's column headers, so we read through it once to get rid of it in essence
 
-for line in dataFile.readlines(): # Run a for loop through all rows of the file (with the exception of the first one cause we already ditched it)
+for line in dataFile.readlines(): # Run a for loop through all rows of the file except row 0 
     line = line.split(",") # Split into two lists with the "," delimeter
     time.append(float(line[0])) # Add to the time list
     absorption.append(float(line[1])) # Add to the absorption list
 
 # %%
-# First important to import your libraries
-
-import numpy
+import numpy # First  things first import your libraries
 from matplotlib import pyplot as plt
 
 # %% [markdown]
 # ## Data Visualisation
 
 # %%
-# TELL QUARTO WHAT TO DO WITH THIS FIGURE FOR PDF VIEWING
+# Instructing Quarto what to do essentially
 
 #| label: fig-dataset
 #| fig-cap: "Measurements from an oxymetry sensor as a
 #| function of time for 3 cycles"
 
-# Create a plot using the 'time' and 'absorption' lists created earlier
 
-plt.plot(time, absorption)
-plt.title("Sample Absorption vs. Time for a .tar Pulse Data File")
+plt.plot(time, absorption) # We create a plot with the lists from earlier
+plt.title("Sample Absorption vs. Time")
 plt.xlabel("Time (s)")
-plt.ylabel("Absorption (unknown units)")
+plt.ylabel("Absorption")
 
 # %% [markdown]
-# ## Lists and Arrays Intro
+# ## Lists & Arrays
 
 # %%
 a = numpy.arange(10)+1
@@ -104,65 +96,65 @@ a.shape
 # %%
 a.dtype
 
-# int64 means each integer require 64 bits of storage
+# int64 --> integer require 64 bits of storage
 
 # %%
 a.nbytes
 
-# there are 8 bits in a byte
+# 8 bits in a byte
 
 # %%
 b = numpy.array([[1,2,3], [4,5,6]])
 b
 
 # %%
-b.shape
+b.shape # 2 rows 3 columns
 
 # %%
-b.T # Transpose function -- rotates the array 90 degrees
+b.T # Transpose function --> rotates the array 90 degrees (each row becoming a column in essence)
 
 # %%
 b.T @ b # @ is dot product, so this is the b-matrix squared
 
 # %%
-a
+a # 1 through 10 
 
 # %%
-print(numpy.max(a)) # finds the maximum value in an array
-print(numpy.argmax(a)) # tells you what index the maximum value is at
+print(numpy.max(a)) # Find MAX
+print(numpy.argmax(a)) # Index wher MAX is
 
 # %% [markdown]
 # ## Algorithm Design
 
 # %% [markdown]
-# We want to find the heart rate using HR = 60/deltaTpeaks
+#  Aim --> Find the heart rate using HR = 60/deltaTpeaks
 
 # %%
-# Show one cycle of the PPG data
+# One cycle of PPG
 
 plt.plot(time, absorption, ".")
 plt.xlim(time[30], time[250])
 
 # %% [markdown]
-# We want to be able to calculate the heart rate using a primitive technique (meaning no automatic functions). So let's try using a for loop that finds the global maximum of each cycle using a window!
+# Calculate the heart rate using a basic (w/o automatic functions). For loop that finds the global maximum of each cycle using a window!
 
 # %%
-absorption = numpy.array(absorption) # Turn the list into a numpy array
+absorption = numpy.array(absorption) # Lists are now numpy arrays
 time = numpy.array(time)
-# subset = absorption[:1000] # Just take a subset to make initial testing easier
+# subset = absorption[:1000] # Taking a subset helps during initial testing
 subset = absorption
 w = 50 # Window for finding global maxmimum
 plt.plot(subset)
 
 # %%
-peaks = [] # Create a new array to store the peak locations
+peaks = [] # New array to store the peaks
 
-# Create a for loop that will use a sliding window of size 2w to find the global maxima for each cycle
+# For loop with sliding window of size 2w to find the global maxima for each cycle
 for i in range(len(subset)):
     start = max(i-w, 0) # Start the window at i-w unless that is negative, in which case start at 0
-    end = min(i+w, len(subset)) # Stop the window at i+w unless that is greater than the length of the list, in which case end at the end
+    end = min(i+w, len(subset)) # Stop the window at i+w unless > the length of the list, in which case end at the end
     window = subset[start:end] # Get the window
-    max_pos = numpy.argmax(window) + start # Gives us the position of where the maximum lies within the for loop window.
+    max_pos = numpy.argmax(window) + start # Position of maximum within the for loop window.
         # "+ start" is needed in order to SHIFT the index of the position back to where it is in the actual subset
     if i == max_pos:
         peaks.append(i) # If the maximum position is where i is, then append that position to the peaks array
@@ -175,7 +167,7 @@ plt.plot(subset)
 plt.plot(peaks, subset[peaks], "ro")
 
 # %% [markdown]
-# Now we can plot the heart rate using the time between the PPG peaks and the equation above!
+# Now we can plot the heart rate using the time between the PPG peaks and the equation above! (inital aim aha !)
 
 # %%
 tp = time[peaks] # Create an array of the time at which each peak occurs
@@ -185,5 +177,3 @@ plt.plot(hr)
 plt.title("PPG-Derived Heart Rate Using Peak Detection")
 plt.xlabel("Time (s)")
 plt.ylabel("Heart Rate (bpm)")
-
-# %%
