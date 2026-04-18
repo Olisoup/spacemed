@@ -147,7 +147,7 @@ w = 50 # Window for finding global maxmimum
 plt.plot(subset)
 
 # %%
-peaks = [] # New array to store the peaks
+peaks1 = [] # New array to store the peaks
 
 # For loop with sliding window of size 2w to find the global maxima for each cycle
 for i in range(len(subset)):
@@ -157,14 +157,35 @@ for i in range(len(subset)):
     max_pos = numpy.argmax(window) + start # Position of maximum within the for loop window.
         # "+ start" is needed in order to SHIFT the index of the position back to where it is in the actual subset
     if i == max_pos:
-        peaks.append(i) # If the maximum position is where i is, then append that position to the peaks array
+        peaks1.append(i) # If the maximum position is where i is, then append that position to the peaks array
 
-peaks = peaks[:-1]
+peaks1 = peaks1[:-1]
 # print(peaks)
 
 # %%
+import pandas # trying the new fancy stuff for this to work
+
+# %%
+import scipy
+
+# %%
+PPG = pandas.read_csv("data/pulse_data.csv", delimiter="," , encoding='ISO-8859-1', engine= "python")
+
+# %%
+PPG
+
+# %%
+from scipy.signal import find_peaks
+data = absorption
+peaks, _ = find_peaks (data, height=2500) # setting the minimum height for it to work correctly
+
+# %%
+plt.plot(data)
+plt.plot(peaks, data[peaks]) # WOOHOOO took me a sec but it worked ! 
+
+# %%
 plt.plot(subset)
-plt.plot(peaks, subset[peaks], "ro")
+plt.plot(peaks1, subset[peaks1], "ro")
 
 # %% [markdown]
 # Now we can plot the heart rate using the time between the PPG peaks and the equation above! (inital aim aha !)
