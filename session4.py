@@ -177,11 +177,11 @@ PPG
 # %%
 from scipy.signal import find_peaks
 data = absorption
-peaks, _ = find_peaks (data, height=2500) # setting the minimum height for it to work correctly
+peaks, _ = find_peaks (data, height=2500, distance=1) # setting the minimum height for it to work correctly
 
 # %%
 plt.plot(data)
-plt.plot(peaks, data[peaks]) # WOOHOOO took me a sec but it worked ! 
+plt.plot(peaks, data[peaks],"ro") # WOOHOOO took me a sec but it worked ! 
 
 # %%
 plt.plot(subset)
@@ -191,7 +191,7 @@ plt.plot(peaks1, subset[peaks1], "ro")
 # Now we can plot the heart rate using the time between the PPG peaks and the equation above! (inital aim aha !)
 
 # %%
-tp = time[peaks] # Create an array of the time at which each peak occurs
+tp = time[peaks1] # Create an array of the time at which each peak occurs
 delta_t = tp[1:]-tp[:-1] # Find the time between peaks by subtracting t_n-1 from t_n
 hr = 60/delta_t # Calculate the heart rate using the equation above
 plt.plot(hr)
