@@ -53,7 +53,7 @@ absorption = []
 
 # %%
 
-dataFile = open("data/pulse_data.csv") # Importing the file
+dataFile = open("../data/pulse_data.csv") # Importing the file adding "../" Help go to the previous directory, solving our problem
 
 # Use a for loop to fill the lists
 
