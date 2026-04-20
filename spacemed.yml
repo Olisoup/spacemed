@@ -1,0 +1,16 @@
+name: spacemed26
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - jupyter
+  - jupytext
+  - ipympl
+  - numpy
+  - scipy
+  - matplotlib
+  - quarto
+  - pandas
+  - pip
+  - pip:
+    - nibabel
