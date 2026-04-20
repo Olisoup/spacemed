@@ -46,23 +46,24 @@
 # ### Load Data
 
 # %%
-# Create two lists that will contain the two separate values in the table
+def read_pulse (fname) : 
+    time = []
+    absorption = []
+    dataFile = open(fname) # Importing the file adding "../" Help go to the previous directory, solving our problem
+    
+    # Use a for loop to fill the lists
+    
+    dataFile.readline() # We don't want to read in the first since it's column headers, so we read through it once to get rid of it in essence
+    
+    for line in dataFile.readlines(): # Run a for loop through all rows of the file except row 0 
+        line = line.split(",") # Split into two lists with the "," delimeter
+        time.append(float(line[0])) # Add to the time list
+        absorption.append(float(line[1])) # Add to the absorption list
+    return time, absorption
 
-time = []
-absorption = []
 
 # %%
-
-dataFile = open("../data/pulse_data.csv") # Importing the file adding "../" Help go to the previous directory, solving our problem
-
-# Use a for loop to fill the lists
-
-dataFile.readline() # We don't want to read in the first since it's column headers, so we read through it once to get rid of it in essence
-
-for line in dataFile.readlines(): # Run a for loop through all rows of the file except row 0 
-    line = line.split(",") # Split into two lists with the "," delimeter
-    time.append(float(line[0])) # Add to the time list
-    absorption.append(float(line[1])) # Add to the absorption list
+time, absorption = read_pulse("../data/pulse_data.csv")
 
 # %%
 import numpy # First  things first import your libraries
