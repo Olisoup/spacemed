@@ -1,3 +1,14 @@
+# Package Overview
+
+Spacemed Package v 0.0.1
+*GNU General Public License v3*
+*Python 3*
+
+Includes all tools needed for the Spacemed 2026 Digital Literacy Course
+
+Includes : 
+    Pandas
+    SciPy
 
 # Welcome to 2026 Course of 
 

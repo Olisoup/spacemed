@@ -1,18 +1,4 @@
 # ---
-# title: "Session 4: Reproducible Documents"
-# author: Olivier Soubelet
-# format:
-#   html:
-#     code-fold: true
-#   pdf:
-#     echo: false
-#     pdf-engine: pdflatex
-#     toc: true
-#     number-depth: 2
-#     number-sections: true
-#     papersize: a4
-#     documentclass: article
-# jupyter: python3
 # jupyter:
 #   jupytext:
 #     formats: ipynb,py:percent
@@ -27,23 +13,68 @@
 #     name: conda-env-.conda-spacemed26-py
 # ---
 
-# %% [markdown]
-# # Reproducible Documents & Algorithm Design
+# %%
+#reload packages that have changed
+# %load_ext autoreload
+# %autoreload 2 
+
+# %% [raw]
+# ---
+# title: "Session 4: Reproducible Documents"
+# author: Olivier Soubelet
+# format:
+#   html:
+#     code-fold: true
+#   pdf:
+#     echo: false
+#     pdf-engine: pdflatex
+#     toc: true
+#     number-depth: 2
+#     number-sections: true
+#     papersize: a4
+#     documentclass: article
+# jupyter: python3
+# ---
 
 # %% [markdown]
-# ## Rocket Equation
-# At time $t_0$ to rocket starts to expel gas at a
-# _constant mass flow rate_ $R$ meassured in kg/s
-# and _exhaust velocity relative to the rocket_
-# $v_e$ in m/s.
-# $$
-# \frac{dv}{dt} = -\frac{F}{m(t)} = -\frac{Rv_e}{m(t)}
-# $$ {#eq-rocket-acc}
-# Integrating both sides of @eq-rocket-acc from 0
-# to $T$ we get
+# # Session 6 Notebook
 
 # %% [markdown]
-# ### Load Data
+# ## Functions
+
+# %% [markdown]
+# A **function** is a named, REUSABLE block of code that does a SPECIFIC job.
+# Instead of copy-pasting the same logic in multiple cells, you define it once and call it by name.
+#
+# Key benefits:
+# - **Readability** — your notebook reads like a story, not a wall of code
+# - **Reusability** — call the same logic on different data files without rewriting it
+# - **Debuggability** — fix a bug once, in one place
+# - **Packagability** — functions are the building blocks of a proper Python package
+
+# %%
+def sum_prod(a,b,c=1) : # Here a and b are positional arguments, c is a key argument
+    return c*(a+b)
+
+
+# %%
+sum_prod(1,2) # If you don't specify, c will always be equal to 1, key parameter
+
+# %%
+sum_prod(1,2,2) # Here we swapped it to 2, it matches to the position in the header essentially, don't change the order
+
+# %%
+name="Olivier"
+age="newly qualified 1/4 life crisis"
+
+# %%
+print(name, age, sep= " is a ") # Example of keyword argument
+
+
+# %% [markdown]
+# ### Exercise 1st part
+#
+# - Move data loader to a function called *read_pulse*
 
 # %%
 def read_pulse (fname) : 
@@ -63,66 +94,42 @@ def read_pulse (fname) :
 
 
 # %%
-time, absorption = read_pulse("../data/pulse_data.csv")
+time, absorption = read_pulse("../data/pulse_data.csv") # make sure to be in correct location before running, or move accordingly
+
+# %% [markdown]
+# ## Packaging
+
+# %% [markdown]
+#  __version__ = "0.0.1"  
+#  
+#  - 1st number is a Major Change
+#  - 2nd is a minor change, such as a new feature
+#  - 3rd is an update, code just works better
+#  - 
+# https://semver.org/
+
+# %% [markdown]
+# ## Exercise (Full version post-session)
+# Use functions to automate session4
+
+# %% [markdown]
+# ### Load Data
+
+# %%
+import spacemed # key step here to make sure this all works when calling on the functions
+
+# %%
+spacemed.__version__
+
+# %%
+time, absorption = spacemed.read_pulse("../data/pulse_data.csv")
+
+# %%
+# !pwd
 
 # %%
 import numpy # First  things first import your libraries
 from matplotlib import pyplot as plt
-
-# %% [markdown]
-# ## Data Visualisation
-
-# %%
-# Instructing Quarto what to do essentially
-
-#| label: fig-dataset
-#| fig-cap: "Measurements from an oxymetry sensor as a
-#| function of time for 3 cycles"
-
-
-plt.plot(time, absorption) # We create a plot with the lists from earlier
-plt.title("Sample Absorption vs. Time")
-plt.xlabel("Time (s)")
-plt.ylabel("Absorption")
-
-# %% [markdown]
-# ## Lists & Arrays
-
-# %%
-a = numpy.arange(10)+1
-
-# %%
-a.shape
-
-# %%
-a.dtype
-
-# int64 --> integer require 64 bits of storage
-
-# %%
-a.nbytes
-
-# 8 bits in a byte
-
-# %%
-b = numpy.array([[1,2,3], [4,5,6]])
-b
-
-# %%
-b.shape # 2 rows 3 columns
-
-# %%
-b.T # Transpose function --> rotates the array 90 degrees (each row becoming a column in essence)
-
-# %%
-b.T @ b # @ is dot product, so this is the b-matrix squared
-
-# %%
-a # 1 through 10 
-
-# %%
-print(numpy.max(a)) # Find MAX
-print(numpy.argmax(a)) # Index wher MAX is
 
 # %% [markdown]
 # ## Algorithm Design
@@ -130,72 +137,41 @@ print(numpy.argmax(a)) # Index wher MAX is
 # %% [markdown]
 #  Aim --> Find the heart rate using HR = 60/deltaTpeaks
 
-# %%
-# One cycle of PPG
-
-plt.plot(time, absorption, ".")
-plt.xlim(time[30], time[250])
-
 # %% [markdown]
 # Calculate the heart rate using a basic (w/o automatic functions). For loop that finds the global maximum of each cycle using a window!
 
 # %%
-absorption = numpy.array(absorption) # Lists are now numpy arrays
-time = numpy.array(time)
-# subset = absorption[:1000] # Taking a subset helps during initial testing
-subset = absorption
-w = 50 # Window for finding global maxmimum
-plt.plot(subset)
+# %cd /home/olso13/SpaceMed-2026/olso13 # Change the working directory with console command so paths resolve correctly
 
 # %%
-peaks1 = [] # New array to store the peaks
-
-# For loop with sliding window of size 2w to find the global maxima for each cycle
-for i in range(len(subset)):
-    start = max(i-w, 0) # Start the window at i-w unless that is negative, in which case start at 0
-    end = min(i+w, len(subset)) # Stop the window at i+w unless > the length of the list, in which case end at the end
-    window = subset[start:end] # Get the window
-    max_pos = numpy.argmax(window) + start # Position of maximum within the for loop window.
-        # "+ start" is needed in order to SHIFT the index of the position back to where it is in the actual subset
-    if i == max_pos:
-        peaks1.append(i) # If the maximum position is where i is, then append that position to the peaks array
-
-peaks1 = peaks1[:-1]
-# print(peaks)
+dataFile = open("/home/olso13/SpaceMed-2026/olso13/data/pulse_data.csv") # Open CSV file using path (not necessary but having it as reference is nice)
 
 # %%
-import pandas # trying the new fancy stuff for this to work
+peaks = spacemed.find_peaks(absorption, w=150) #call on the function, add data file and define the sliding window (here 150 samples)
 
 # %%
-import scipy
+time = numpy.array(time) # Conversion to arrays
+absorption = numpy.array(absorption)
 
 # %%
-PPG = pandas.read_csv("data/pulse_data.csv", delimiter="," , encoding='ISO-8859-1', engine= "python")
-
-# %%
-PPG
-
-# %%
-from scipy.signal import find_peaks
-data = absorption
-peaks, _ = find_peaks (data, height=2500, distance=1) # setting the minimum height for it to work correctly
-
-# %%
-plt.plot(data)
-plt.plot(peaks, data[peaks],"ro") # WOOHOOO took me a sec but it worked ! 
-
-# %%
-plt.plot(subset)
-plt.plot(peaks1, subset[peaks1], "ro")
+plt.plot(absorption)
+plt.plot(peaks, absorption[peaks],"ro") # Okay this seems to all work now 
 
 # %% [markdown]
 # Now we can plot the heart rate using the time between the PPG peaks and the equation above! (inital aim aha !)
 
 # %%
-tp = time[peaks1] # Create an array of the time at which each peak occurs
-delta_t = tp[1:]-tp[:-1] # Find the time between peaks by subtracting t_n-1 from t_n
-hr = 60/delta_t # Calculate the heart rate using the equation above
+### Finding Heart Rata
+
+# %%
+hr = spacemed.calc_heart_rate(time, peaks) # Compute heart rate from findpeaks
+# spacemed.calc_heart_rate uses the previous heart rate formula delta_time = tp[1:]-tp[:-1] & hr = 60/delta_t
+
+# %%
 plt.plot(hr)
 plt.title("PPG-Derived Heart Rate Using Peak Detection")
 plt.xlabel("Time (s)")
 plt.ylabel("Heart Rate (bpm)")
+
+# %% [markdown]
+# There we go, a nice labeled graph ! 
