@@ -1,0 +1,23 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Olivier's Spacemed 26 Course
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Olivier
+    family-names: Soubelet
+    email: olivier.soubelet@gmail.com
+    affiliation: Charité Universitätsmedizin Berlin
+repository-code: >-
+  https://git.bihealth.org/spacemed-digital-literacy/2026/personal/olso13
+abstract: Resources for the Sapcemed 26 Digital Literacy Course
+keywords:
+  - Scientific
+  - Research
+license: GPL-3.0
+version: 0.0.1
+date-released: '2026-05-02'

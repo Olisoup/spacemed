@@ -12,5 +12,6 @@ dependencies:
   - quarto
   - pandas
   - pip
+  - flake8
   - pip:
     - nibabel
