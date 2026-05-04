@@ -6,8 +6,8 @@ def find_peaks(absorption, w=50):
     subset = absorption
     peaks = []
     for i in range(len(subset)):
-        start = max(i-w, 0)
-        end = min(i+w, len(subset))
+        start = max(i - w, 0)
+        end = min(i + w, len(subset))
         window = subset[start:end]
         max_pos = numpy.argmax(window) + start
 
