@@ -62,10 +62,31 @@ def build_activation_map(fmri_file, slice_index, output_file):
                                               normalise(signal.astype(float)),
                                               mode="same")
             corr_mat[i, j] = numpy.max(cross)
+    # ── 1. Brain mask ────────────────────────────────────────────────────────────
+    # Voxels outside the brain have near-zero signal across all timepoints.
+    # Taking the mean over time gives a simple intensity map — low mean = not brain.
+    # We threshold at 10% of the maximum mean intensity.
 
+    mean_signal = data[:, :, slice_index].mean()   # mean across time for each voxel 
+    
+    mean_signal = numpy.mean(data[:, :, slice_index, :], axis=-1)  # shape (nx, ny)
+
+    brain_mask = mean_signal > (0.37* mean_signal.max())  # True = inside brain
+
+    # Apply: zero out everything outside the brain
+    corr_mat[~brain_mask] = 0
+
+    # ── 2. Correlation threshold ──────────────────────────────────────────────────
+    # Only keep voxels with a strong enough activation signal.
+    # Tune this value — try between 5 and 15 to see what looks cleanest.
+
+    threshold = 3.0
+    corr_mat[corr_mat < threshold] = 0
+
+    # ── Plot ──────────────────────────────────────────────────────────────────
     print("Done. Saving image ...")
     fig, ax = pyplot.subplots(figsize=(7, 6))
-    im = ax.imshow(corr_mat.T, origin="lower", cmap="viridis")
+    im = ax.imshow(corr_mat.T, origin="lower", cmap="CMRmap", vmin=0)
     pyplot.colorbar(im, ax=ax, label="Peak cross-correlation")
     ax.set_title(f"fMRI Activation Map – Slice z = {slice_index}", fontsize=13)
     ax.set_xlabel("Voxel X")
