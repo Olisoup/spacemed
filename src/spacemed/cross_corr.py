@@ -1,11 +1,11 @@
-from matplotlib import pyplot
-import seaborn
-import pandas
-import nibabel
-import scipy.signal
-import numpy
-import spacemed
-from .normalise import normalise
+import seaborn # noqa
+import pandas # noqa
+import nibabel # noqa
+import scipy.signal # noqa
+import numpy # noqa
+import spacemed # noqa
+from .normalise import normalise # noqa
+
 
 def cross_corr(signal, fmri_data, voxel):
     """
@@ -39,7 +39,7 @@ def cross_corr(signal, fmri_data, voxel):
     ts = fmri_data[i, j, k]  # shape: (nt,)
 
     # ── Step 2: normalise both signals ──────────────────────────────────────
-    ts_norm  = normalise(ts)
+    ts_norm = normalise(ts)
     sig_norm = normalise(numpy.array(signal, dtype=float))
 
     # ── Step 3: compute the cross-correlation ───────────────────────────────
@@ -55,34 +55,8 @@ def cross_corr(signal, fmri_data, voxel):
                                          mode="same")
 
     # ── Step 4: find the peak ────────────────────────────────────────────────
-    peak_idx  = numpy.argmax(cross)   # index of the maximum value
+    peak_idx = numpy.argmax(cross)   # index of the maximum value
     peak_corr = cross[peak_idx]       # the maximum correlation value
-    peak_lag  = lags[peak_idx]        # the lag (in samples) at the peak
+    peak_lag = lags[peak_idx]        # the lag (in samples) at the peak
 
-    # ── Step 5: plot the cross-correlation curve ─────────────────────────────
-    fig, ax = pyplot.subplots(figsize=(9, 4))
-
-    ax.plot(lags, cross, color="steelblue", linewidth=1.5, label="Cross-correlation")
-
-    # Mark the peak with a red dot so it is easy to spot (extra aha)
-    ax.axvline(x=peak_lag, color="red", linestyle="--", alpha=0.6,
-               label=f"Peak lag = {peak_lag} samples")
-    ax.scatter([peak_lag], [peak_corr], color="red", zorder=5,
-               label=f"Peak value = {peak_corr:.2f}")
-
-    ax.axhline(0, color="grey", linewidth=0.8, linestyle=":")  # zero reference line
-
-    ax.set_title(f"Cross-Correlation at Voxel {voxel}", fontsize=13)
-    ax.set_xlabel("Lag (samples)")
-    ax.set_ylabel("Correlation")
-    ax.legend()
-    pyplot.tight_layout()
-    pyplot.show()
-
-    # ── Step 6: Print a readable summary ───────────────────────────────
-    print(f"Voxel           : {voxel}")
-    print(f"Peak correlation: {peak_corr:.4f}")
-    print(f"Peak lag        : {peak_lag} samples")
-
-    return peak_corr, peak_lag
-
+    return lags, cross, peak_corr, peak_lag

@@ -1,4 +1,6 @@
 import numpy
+
+
 def normalise(data):
     """
     Z-score normalise a 1-D numpy array.

@@ -193,6 +193,9 @@ numpy.zeros(fmri.shape[:2]) # you have a loop storing stuff in this array, neste
 # %%
 spacemed.cross_corr(signal, fmri_data, p1)
 
+# %%
+spacemed.plot_cross_corr(*spacemed.cross_corr(signal, fmri_data, p1), p1)
+
 
 # %% [markdown]
 # ## 2 Cross correlation for a single slice program
