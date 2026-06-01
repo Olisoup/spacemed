@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=40G
 #SBATCH --time=01:00:00
-#SBATCH --array=1-32
+#SBATCH --array=0-31
 
 
 # the program we are running
