@@ -7,7 +7,6 @@
 #SBATCH --time=01:00:00
 #SBATCH --array=0-31
 
-
 # the program we are running
 pwd
 source /etc/profile.d/conda.sh
